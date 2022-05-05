@@ -1,11 +1,17 @@
 <template>
   <div id="loginFrame">
     <h1 class="title">Hello,欢迎使用管理后台</h1>
-    <el-form class="el-form" label-position="top" :model="formData" :rules="rules">
+    <el-form
+      class="el-form"
+      label-position="top"
+      ref="formEl"
+      :model="formData"
+      :rules="rules"
+    >
       <el-form-item class="el-form-item" label="用户名" prop="userName">
         <el-input class="el-input" v-model="formData.userName"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="userName">
+      <el-form-item label="密码" prop="password">
         <el-input
           class="el-input"
           v-model="formData.password"
@@ -13,22 +19,61 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="el-button" type="primary">登录</el-button>
+        <el-button class="el-button" type="primary" @click="doLogin"
+          >登录</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+import { accountLogin } from "@/service/apis/main";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter()
+const formEl = ref(null);
 const formData = reactive({
   userName: "",
   password: "",
 });
 const rules = {
-  userName:[{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' },]
-}
+  userName: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+};
+// 登录
+const login = async () => {
+  try {
+    const res = await accountLogin({
+      account: formData.userName,
+      password: formData.password,
+    });
+    if (res.code != "0") {
+      ElMessage({
+        message: res.msg,
+        grouping: true,
+        type: "warning",
+      });
+      console.log("code");
+    }else {
+      router.push('/home')
+    }
+    console.log(res);
+  } catch (err) {
+    console.log(err);
+  }
+};
+// 点击登录
+const doLogin = async () => {
+  await formEl.value.validate((valid, fields) => {
+    if (valid) {
+      login();
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
+};
 </script>
 
 <style lang="scss" scoped>

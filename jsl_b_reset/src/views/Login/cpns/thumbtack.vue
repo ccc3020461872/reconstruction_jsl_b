@@ -8,8 +8,8 @@
       <message-pop ref="callusEl" :width="popInfo.width" :top="popInfo.top">
           <template #title>ccc</template>
           <template #content>
-            <!-- <callus /> -->
-            <qrCode/>
+            <callus  v-if="currentIndex==0"/>
+            <qrCode v-else-if="currentIndex==2"/>
           </template>
         </message-pop>
   </div>
@@ -60,7 +60,7 @@ const itemClick = (e) => {
    currentIndex.value = e.currentTarget.dataset.index
   if(currentIndex.value === '0'){
     popInfo.width = '250',
-    popInfo.top = '-73'
+    popInfo.top = '-63'
   }else if(currentIndex.value === '2'){
     popInfo.width = '280',
     popInfo.top = '-406'
