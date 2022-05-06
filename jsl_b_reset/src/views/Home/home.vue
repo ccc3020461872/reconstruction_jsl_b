@@ -3,17 +3,20 @@
     <el-header class="header">Header</el-header>
     <el-container>
       <el-aside width="200px" class="aside">
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-        >
-          <el-menu-item v-for="(item, index) in navList" :index="index + ''">
-            <el-icon><setting /></el-icon>
-            <template #title>Navigator Four</template>
-          </el-menu-item>
-        </el-menu>
+     
+       <el-menu
+        default-active="2"
+        class="el-menu-vertical-demo"
+        @open="handleOpen"
+        @close="handleClose"
+      >
+       <template v-for="(item, index) in navList">
+        <el-menu-item :index="index + ''">
+          <el-icon><setting /></el-icon>
+          <span>Navigator six</span>
+        </el-menu-item>
+       </template>
+      </el-menu>
       </el-aside>
       <el-main class="main">
         <router-view></router-view>
@@ -31,7 +34,7 @@ import {
   Setting,
 } from "@element-plus/icons-vue";
 import { reactive } from "vue";
-const navList = reactive([
+const navList = [
   {
     title: "首页",
     path: "",
@@ -68,7 +71,7 @@ const navList = reactive([
     title: "首页",
     path: "",
   },
-]);
+];
 const handleOpen = () => {
     console.log('handOpen');
 }
