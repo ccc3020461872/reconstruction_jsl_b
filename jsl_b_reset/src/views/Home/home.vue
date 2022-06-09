@@ -1,19 +1,25 @@
 <template>
   <el-container class="container">
-    <el-header class="header">Header</el-header>
+    <el-header class="header">
+      <Header @doCollapse="setCollapse"/>
+    </el-header>
     <el-container>
       <el-aside width="200px" class="aside">
-     
        <el-menu
         default-active="2"
         class="el-menu-vertical-demo"
+        :collapse="isCollapse"
         @open="handleOpen"
         @close="handleClose"
+        background-color="#eeeeee"
+        active-text-color="#fff"
+        mode="vertical"
+       @select="doSelect"
       >
-       <template v-for="(item, index) in navList">
-        <el-menu-item :index="index + ''">
+       <template v-for="(item, index) in navList" :key="index">
+        <el-menu-item :index="item.path" class="menu-item" >
           <el-icon><setting /></el-icon>
-          <span>Navigator six</span>
+          <span>{{item.meta.title}}</span>
         </el-menu-item>
        </template>
       </el-menu>
@@ -33,66 +39,75 @@ import {
   Location,
   Setting,
 } from "@element-plus/icons-vue";
-import { reactive } from "vue";
-const navList = [
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-  {
-    title: "首页",
-    path: "",
-  },
-];
+import { reactive, ref } from "vue";
+import {homeChildren} from "@/router/routes";
+import Header from "./Header/header.vue";
+import { queryBNewIndexVo } from '@/service/apis/main'
+import { ElMessage } from "element-plus";
+import { useStore } from "vuex";
+const navList = homeChildren
+const router = useRouter()
+const store = useStore()
+console.log(navList);
+const isCollapse = ref(false)
 const handleOpen = () => {
     console.log('handOpen');
 }
 const handleClose = () => {
     console.log('handleClose');
 }
+const setCollapse = (v) => {
+  isCollapse.value = v
+}
+const doQueryBNewIndexVo = async() => {
+  try{
+  const res = await queryBNewIndexVo()
+  if(res.code === '0'){
+    store.commit('app/setHomeInfo',res.data)
+  }else {
+     ElMessage({
+    message: res.msg,
+    type: 'warning',
+  })
+  }
+  }catch(err){
+    console.log(err);
+  }
+
+
+}
+// 激活菜单
+const doSelect = (e) => {
+  console.log(e);
+  router.push(`/home/${e}`)
+}
+doQueryBNewIndexVo()
 </script>
 
 <style lang="scss" scoped>
+
 .container {
   width: 100%;
   height: 100vh;
   overflow: auto;
 }
-.header {
-  background-color: red;
+.menu-item {
+  height: 75px;
+  width: 100%;
 }
+
 .aside {
-  background-color: aqua;
 }
 .main {
-  background-color: aquamarine;
+}
+::v-deep .is-active {
+  background-color: #f6b400 !important;
+}
+::v-deep .el-menu-item:hover {
+  background-color: #ffd461 !important;
+}
+::v-deep .el-main{
+  background-color: rgb(245, 247, 249);
+  
 }
 </style>

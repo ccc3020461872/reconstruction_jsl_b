@@ -1,5 +1,8 @@
 // 封装请求
 import axios from "axios";
+import store from '@/store'
+import router  from "@/router";
+import { useStorage } from "@/utils";
 const BASE_URL = 'https://test.api.jinselu.net/'
 // 请求
 const http = axios.create({
@@ -8,7 +11,13 @@ const http = axios.create({
 });
 // 请求拦截
 http.interceptors.request.use(
-  (config) => {
+  config => {
+    const {params} = config
+    const tokenBo = store.state.user.tokenBo|| useStorage('tokenBo') || {}
+    config.params = {
+      ...params,
+      ...tokenBo
+    }
     //请求头设置
     // let token = localStorage.getItem('token') || ''
     // config.headers.Authorization = token
@@ -26,6 +35,9 @@ http.interceptors.response.use(
         message: res.data.msg,
         type: "warning",
       });
+    }
+    if(res.data.code == 2) {
+      router.push('/login')
     }
     return res.data;
   },

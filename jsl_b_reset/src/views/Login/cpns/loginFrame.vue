@@ -32,7 +32,10 @@ import { reactive, ref } from "vue";
 import { accountLogin } from "@/service/apis/main";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+import {useStorage,useToLine} from '@/utils'
+import { useStore } from "vuex";
 const router = useRouter()
+const store = useStore()
 const formEl = ref(null);
 const formData = reactive({
   userName: "",
@@ -57,6 +60,8 @@ const login = async () => {
       });
       console.log("code");
     }else {
+      useStorage('tokenBo',res.data.tokenBo)
+      store.commit('user/setTokenBo',useToLine(res.data.tokenBo))
       router.push('/home')
     }
     console.log(res);
