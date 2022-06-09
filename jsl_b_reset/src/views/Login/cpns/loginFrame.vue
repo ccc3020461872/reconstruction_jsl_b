@@ -79,6 +79,11 @@ const doLogin = async () => {
     }
   });
 };
+window.addEventListener('keyup',function(e){
+  if(e.key === 'Enter'){
+    doLogin()
+  }
+})
 </script>
 
 <style lang="scss" scoped>

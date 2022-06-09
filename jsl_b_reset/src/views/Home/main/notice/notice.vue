@@ -19,6 +19,7 @@
           v-for="(item, index) in jslNoticeList"
           :key="index"
           class="list-item"
+          @click="showDetail(item)"
         >
           <span class="title">{{ item.title }}</span>
           <span class="time">{{ item.createTimeString }}</span>
@@ -31,10 +32,10 @@
     v-model="isShowDetail"
     title="通知公告详情"
     width="50%"
-    :before-close="handleClose"
+    custom-class="notice-pop"
   >
     <p class="title">{{noticeDetail.title}}</p>
-    <p class="content">{{noticeDetail.title}}</p>
+    <p class="notice-content" v-html="noticeDetail.content"></p>
 
     <template #footer>
       <span class="dialog-footer">
@@ -91,6 +92,8 @@ const showDetail = (e) => {
       margin: 20px 0;
     }
     .text {
+      font-size: 16px;
+      line-height: 28px;
         white-space: normal; /*默认*/
     -webkit-line-clamp: 5; /*控制行数*/
     text-overflow: ellipsis; /*打点*/
@@ -117,6 +120,19 @@ const showDetail = (e) => {
   }
   .list-item:nth-child(2n-1):hover {
     background-color: #fff7e0;
+  }
+}
+.notice-pop {
+  font-size: 14px;
+  line-height: 28px;
+  .title {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+  .notice-content {
+    font-size: 16px;
+    line-height: 28px;
   }
 }
 </style>
