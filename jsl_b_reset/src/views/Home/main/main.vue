@@ -43,7 +43,7 @@
          </el-row>
       </el-col>
      
-      <el-col :span="12"><div class="grid-content bg-purple" /> </el-col>
+      <el-col :span="12"><div class="grid-content bg-purple" /> 456464</el-col>
     </el-row>
   </div>
 </template>

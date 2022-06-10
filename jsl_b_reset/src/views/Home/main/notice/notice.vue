@@ -3,7 +3,7 @@
     <template #header>
       <div class="card-header">
         <span>公告</span>
-        <span class="more">更多></span>
+        <span class="more" @click="$router.push('/noticeList')">更多></span>
       </div>
     </template>
     <div class="content">
@@ -28,28 +28,14 @@
     </div>
   </el-card>
   <!-- 详情 -->
-   <el-dialog
-    v-model="isShowDetail"
-    title="通知公告详情"
-    width="50%"
-    custom-class="notice-pop"
-  >
-    <p class="title">{{noticeDetail.title}}</p>
-    <p class="notice-content" v-html="noticeDetail.content"></p>
-
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button type="primary" @click="isShowDetail = false"
-          >关闭</el-button
-        >
-      </span>
-    </template>
-  </el-dialog>
+  <detail-pop :noticeDetail="noticeDetail" :isShowDetail="isShowDetail">
+    </detail-pop>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import detailPop from "./cpns/detailPop.vue";
 const store = useStore();
 const jslNoticeList = computed(() => {
   console.log(store.state.app.homeInfo);
@@ -122,17 +108,5 @@ const showDetail = (e) => {
     background-color: #fff7e0;
   }
 }
-.notice-pop {
-  font-size: 14px;
-  line-height: 28px;
-  .title {
-    text-align: center;
-    font-weight: 600;
-    margin-bottom: 30px;
-  }
-  .notice-content {
-    font-size: 16px;
-    line-height: 28px;
-  }
-}
+
 </style>

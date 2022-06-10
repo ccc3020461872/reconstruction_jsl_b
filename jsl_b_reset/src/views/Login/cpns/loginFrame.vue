@@ -60,7 +60,7 @@ const login = async () => {
       });
       console.log("code");
     }else {
-      useStorage('tokenBo',res.data.tokenBo)
+      useStorage('tokenBo',useToLine(res.data.tokenBo))
       store.commit('user/setTokenBo',useToLine(res.data.tokenBo))
       router.push('/home')
     }

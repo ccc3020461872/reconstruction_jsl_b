@@ -12,8 +12,8 @@ const http = axios.create({
 // 请求拦截
 http.interceptors.request.use(
   config => {
-    const {params} = config
-    const tokenBo = store.state.user.tokenBo|| useStorage('tokenBo') || {}
+    const { params } = config
+    const tokenBo =useStorage('tokenBo') || {}
     config.params = {
       ...params,
       ...tokenBo
@@ -35,9 +35,13 @@ http.interceptors.response.use(
         message: res.data.msg,
         type: "warning",
       });
-    }
-    if(res.data.code == 2) {
+    }else  if(res.data.code == 2) {
       router.push('/login')
+    }else if(res.data.code != 0){
+      ElMessage({
+        message: res.data.msg,
+        type: "warning",
+      })
     }
     return res.data;
   },

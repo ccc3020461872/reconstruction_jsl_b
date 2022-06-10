@@ -6,18 +6,18 @@
     <el-container>
       <el-aside width="200px" class="aside">
        <el-menu
-        default-active="2"
         class="el-menu-vertical-demo"
         :collapse="isCollapse"
         @open="handleOpen"
         @close="handleClose"
         background-color="#eeeeee"
+        :default-active="activeIndex"
         active-text-color="#fff"
         mode="vertical"
        @select="doSelect"
       >
        <template v-for="(item, index) in navList" :key="index">
-        <el-menu-item :index="item.path" class="menu-item" >
+        <el-menu-item :index="item.path" :route="item" class="menu-item">
           <el-icon><setting /></el-icon>
           <span>{{item.meta.title}}</span>
         </el-menu-item>
@@ -25,7 +25,8 @@
       </el-menu>
       </el-aside>
       <el-main class="main">
-        <router-view></router-view>
+        <router-view>
+        </router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -48,6 +49,7 @@ import { useStore } from "vuex";
 const navList = homeChildren
 const router = useRouter()
 const store = useStore()
+const activeIndex = ref('')
 console.log(navList);
 const isCollapse = ref(false)
 const handleOpen = () => {
@@ -79,8 +81,10 @@ const doQueryBNewIndexVo = async() => {
 // 激活菜单
 const doSelect = (e) => {
   console.log(e);
+  activeIndex.value = e
   router.push(`/home/${e}`)
 }
+
 doQueryBNewIndexVo()
 </script>
 
